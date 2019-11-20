@@ -22,7 +22,6 @@ namespace Skclusive.Script.DevTools.Redux
             };
             foreach(var converter in converters)
             {
-                System.Console.WriteLine($"converter {converter}");
                 SerializerSettings.Converters.Add(converter);
             }
         }
@@ -54,8 +53,6 @@ namespace Skclusive.Script.DevTools.Redux
         {
             if (Status == ReduxStatus.Requested || Status == ReduxStatus.Connected)
             {
-                System.Console.WriteLine($"Redux dev tool OnMessageAsync {json}");
-
                 HandleMessage(json);
             }
 
@@ -66,8 +63,6 @@ namespace Skclusive.Script.DevTools.Redux
         {
             IReduxMessage<string> message = Deserialize<ReduxMessage<string>>(json);
 
-            System.Console.WriteLine($"{json} and message type {message.Type}");
-
             if (message.Type == "START")
             {
                 Status = ReduxStatus.Connected;
@@ -75,8 +70,6 @@ namespace Skclusive.Script.DevTools.Redux
                 var onStart = OnStart;
 
                 onStart?.Invoke(this, EVENT_ARGS);
-
-                System.Console.WriteLine($"{Status} and message type {onStart != null}");
 
                 return;
             }
@@ -90,8 +83,6 @@ namespace Skclusive.Script.DevTools.Redux
             var onPush = OnMessage;
 
             onPush?.Invoke(this, json);
-
-            System.Console.WriteLine($"OnMessage Payload Type: {message.Payload?.Type}");
 
             switch (message.Payload?.Type)
             {
@@ -121,8 +112,6 @@ namespace Skclusive.Script.DevTools.Redux
                     var state = Deserialize<S>(message.State);
 
                     var onState = OnState;
-
-                    System.Console.WriteLine($"OnState State: {Serialize(state)}");
 
                     onState?.Invoke(this, new ReduxMessage<S>
                     {
@@ -205,8 +194,6 @@ namespace Skclusive.Script.DevTools.Redux
             Status = ReduxStatus.Requested;
 
             Id = await JSRuntime.InvokeAsync<object>("Skclusive.Script.DevTools.Redux.connect", DotNetObjectReference.Create(this), name);
-
-            System.Console.WriteLine($"Redux dev tool connected {Id}");
         }
 
         private async Task SendAsync(string action, string state)

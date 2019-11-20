@@ -9,7 +9,7 @@
       "Skclusive.Script.DevTools.Tests/1.0.0": {
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "15.7.0",
-          "Skclusive.Script.DevTools": "1.0.0",
+          "Skclusive.Script.DevTools": "1.0.1",
           "xunit": "2.3.1",
           "xunit.runner.visualstudio": "2.3.1"
         },
@@ -1188,7 +1188,7 @@
           "Microsoft.NET.Test.Sdk": "15.7.0"
         }
       },
-      "Skclusive.Script.DevTools/1.0.0": {
+      "Skclusive.Script.DevTools/1.0.1": {
         "dependencies": {
           "Microsoft.AspNetCore.Components": "3.1.0-preview3.19555.2",
           "Microsoft.AspNetCore.Components.Web": "3.1.0-preview3.19555.2",
@@ -1880,7 +1880,7 @@
       "path": "xunit.runner.visualstudio/2.3.1",
       "hashPath": "xunit.runner.visualstudio.2.3.1.nupkg.sha512"
     },
-    "Skclusive.Script.DevTools/1.0.0": {
+    "Skclusive.Script.DevTools/1.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

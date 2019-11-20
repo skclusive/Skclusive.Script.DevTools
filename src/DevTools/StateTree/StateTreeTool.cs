@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Skclusive.Mobx.StateTree;
 using Skclusive.Script.DevTools.Redux;
-using Newtonsoft.Json;
 
 namespace Skclusive.Script.DevTools.StateTree
 {
@@ -63,8 +62,6 @@ namespace Skclusive.Script.DevTools.StateTree
 
             ReduxTool.OnStart += OnStart;
 
-            ReduxTool.OnMessage += OnMessage;
-
             ReduxTool.OnReset += OnReset;
 
             ReduxTool.OnCommit += OnCommit;
@@ -72,8 +69,6 @@ namespace Skclusive.Script.DevTools.StateTree
             ReduxTool.OnState += OnState;
 
             await ReduxTool.ConnectAsync(Node.GetType().Name);
-
-            Console.WriteLine($"StateTree dev tool connected");
 
             InitialState = Node.GetSnapshot<S>();
 
@@ -95,8 +90,6 @@ namespace Skclusive.Script.DevTools.StateTree
 
         private void OnStart(object sender, EventArgs e)
         {
-            System.Console.WriteLine($"StateTree OnStart {ReduxTool.Status}");
-
             _ = ReduxTool.InitAsync(InitialState);
         }
 
@@ -173,16 +166,9 @@ namespace Skclusive.Script.DevTools.StateTree
         {
             ApplyingSnapshot = true;
 
-            Console.WriteLine("ApplyingSnapshot: " + JsonConvert.SerializeObject(state));
-
             Node.ApplySnapshot(state);
 
             ApplyingSnapshot = false;
-        }
-
-        private void OnMessage(object sender, string json)
-        {
-            Console.WriteLine(@"OnMessage json {json}");
         }
 
         public void Dispose()
@@ -191,8 +177,6 @@ namespace Skclusive.Script.DevTools.StateTree
             throw new Exception("ReduxTool is not available or disposed");
 
             ReduxTool.OnStart -= OnStart;
-
-            ReduxTool.OnMessage -= OnMessage;
 
             ReduxTool.OnReset -= OnReset;
 

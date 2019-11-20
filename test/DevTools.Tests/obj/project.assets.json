@@ -1845,7 +1845,7 @@
           "build/netcoreapp1.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "Skclusive.Script.DevTools/1.0.0": {
+      "Skclusive.Script.DevTools/1.0.1": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -6341,7 +6341,7 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "Skclusive.Script.DevTools/1.0.0": {
+    "Skclusive.Script.DevTools/1.0.1": {
       "type": "project",
       "path": "../../src/DevTools/DevTools.csproj",
       "msbuildProject": "../../src/DevTools/DevTools.csproj"
@@ -6351,7 +6351,7 @@
     ".NETCoreApp,Version=v2.0": [
       "Microsoft.NET.Test.Sdk >= 15.7.0",
       "Microsoft.NETCore.App >= 2.0.0",
-      "Skclusive.Script.DevTools >= 1.0.0",
+      "Skclusive.Script.DevTools >= 1.0.1",
       "xunit >= 2.3.1",
       "xunit.runner.visualstudio >= 2.3.1"
     ]
