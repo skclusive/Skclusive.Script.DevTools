@@ -57,15 +57,15 @@ function dispose(id) {
 }
 
 window.Skclusive = {
+  ...window.Skclusive,
   Script: {
+    ...((window.Skclusive || {}).Script),
     DevTools: {
       Redux: {
         connect,
         send,
         dispose
       }
-    },
-    ...((window.Skclusive || {}).Script)
-  },
-  ...window.Skclusive
+    }
+  }
 };

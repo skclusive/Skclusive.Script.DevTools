@@ -10,7 +10,8 @@ namespace Skclusive.Script.DevTools.Redux
             builder.OpenElement(0, "script");
             builder.AddContent(1,
             #region DevTools.js
-            @"(function () {
+           @"
+           (function () {
             'use strict';
 
             function generateId() {
@@ -72,20 +73,21 @@ namespace Skclusive.Script.DevTools.Redux
             }
 
             window.Skclusive = {
+              ...window.Skclusive,
               Script: {
+                ...((window.Skclusive || {}).Script),
                 DevTools: {
                   Redux: {
                     connect,
                     send,
                     dispose
                   }
-                },
-                ...((window.Skclusive || {}).Script)
-              },
-              ...window.Skclusive
+                }
+              }
             };
 
-          }());"
+          }());
+           "
             #endregion
             );
             builder.CloseElement();
