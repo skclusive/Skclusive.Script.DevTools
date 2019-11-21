@@ -1,15 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.0.2</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <AssemblyName>Skclusive.Script.DevTools</AssemblyName>
     <PackageId>Skclusive.Script.DevTools</PackageId>
     <RootNamespace>Skclusive.Script.DevTools</RootNamespace>
+    <Description>Observable StateTree redux devtools for Blazor</Description>
     <Authors>Skclusive</Authors>
     <Company>Skclusive</Company>
+    <Copyright>Skclusive</Copyright>
+    <PackageTags>blazor mobx redux devtools</PackageTags>
+    <PackageProjectUrl>https://github.com/skclusive/Skclusive.Script.DevTools</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/skclusive/Skclusive.Script.DevTools</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +25,7 @@
 
   <ItemGroup>
     <PackageReference Include="Skclusive.Core.Component" Version="1.0.1" />
-    <PackageReference Include="Skclusive.Mobx.StateTree" Version="1.0.2" />
+    <PackageReference Include="Skclusive.Mobx.StateTree" Version="1.0.3" />
   </ItemGroup>
 
   <Target Name="BuildFrontend" BeforeTargets="Build">

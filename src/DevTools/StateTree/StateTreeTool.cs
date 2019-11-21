@@ -28,11 +28,9 @@ namespace Skclusive.Script.DevTools.StateTree
 
         private IReduxTool<StateTreeToolAction, S> ReduxTool { get; set; }
 
-        private int HandlingMonitorAction { set; get; }
+        private object _node { set; get; }
 
-        private object _node {set; get;}
-
-        private IStateTreeNode Node  => _node.GetStateTree();
+        private IStateTreeNode Node => _node.GetStateTree();
 
         private IDictionary<int, IActionContext> ActionContexts { set; get; } = new Dictionary<int, IActionContext>();
 
@@ -71,6 +69,11 @@ namespace Skclusive.Script.DevTools.StateTree
             await ReduxTool.ConnectAsync(Node.GetType().Name);
 
             InitialState = Node.GetSnapshot<S>();
+        }
+
+        private void OnStart(object sender, EventArgs e)
+        {
+            _ = ReduxTool.InitAsync(InitialState);
 
             Node.OnAction((call) =>
             {
@@ -84,36 +87,27 @@ namespace Skclusive.Script.DevTools.StateTree
                     Args = call.Arguments.ToList()
                 };
 
-                ReduxTool.SendAsync(action, Node.GetSnapshot<S>());
+                _ = ReduxTool.SendAsync(action, Node.GetSnapshot<S>());
             }, true);
-        }
-
-        private void OnStart(object sender, EventArgs e)
-        {
-            _ = ReduxTool.InitAsync(InitialState);
         }
 
         private void OnState(object sender, IReduxMessage<S> message)
         {
-            try
+            switch (message.Payload.Type)
             {
-                HandlingMonitorAction++;
-
-                switch (message.Payload.Type)
-                {
-                    case "ROLLBACK":
+                case "ROLLBACK":
                     {
-                       _ = ReduxTool.InitAsync(message.State);
-                       break;
+                        _ = ReduxTool.InitAsync(message.State);
+                        break;
                     }
-                    case "JUMP_TO_STATE":
-                    case "JUMP_TO_ACTION":
+                case "JUMP_TO_STATE":
+                case "JUMP_TO_ACTION":
                     {
                         ApplySnapshot(message.State);
 
                         break;
                     }
-                    case "IMPORT_STATE":
+                case "IMPORT_STATE":
                     {
                         var nextLiftedState = message.Payload.NextLiftedState;
 
@@ -124,42 +118,19 @@ namespace Skclusive.Script.DevTools.StateTree
                         _ = ReduxTool.InitAsync(message.State);
                         break;
                     }
-                }
-            }
-            finally
-            {
-                HandlingMonitorAction--;
             }
         }
 
         private void OnCommit(object sender, EventArgs e)
         {
-            try
-            {
-                HandlingMonitorAction++;
-
-                _ = ReduxTool.InitAsync(Node.GetSnapshot<S>());
-            }
-            finally
-            {
-                HandlingMonitorAction--;
-            }
+            _ = ReduxTool.InitAsync(Node.GetSnapshot<S>());
         }
 
         private void OnReset(object sender, EventArgs e)
         {
-            try
-            {
-                HandlingMonitorAction++;
+            Node.ApplySnapshot(InitialState);
 
-                Node.ApplySnapshot(InitialState);
-
-                _ = ReduxTool.InitAsync(InitialState);
-            }
-            finally
-            {
-                HandlingMonitorAction--;
-            }
+            _ = ReduxTool.InitAsync(InitialState);
         }
 
         private void ApplySnapshot(S state)
@@ -174,7 +145,7 @@ namespace Skclusive.Script.DevTools.StateTree
         public void Dispose()
         {
             if (ReduxTool == null)
-            throw new Exception("ReduxTool is not available or disposed");
+                throw new Exception("ReduxTool is not available or disposed");
 
             ReduxTool.OnStart -= OnStart;
 

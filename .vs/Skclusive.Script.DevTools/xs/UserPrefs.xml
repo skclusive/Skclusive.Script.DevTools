@@ -2,32 +2,19 @@
   <MonoDevelop.Ide.ItemProperties.test.DevTools.Tests PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="test/DevTools.Tests/TestReduxTool.cs">
     <Files>
-      <File FileName="src/DevTools/Redux/ReduxTool.cs" Line="63" Column="10" />
+      <File FileName="src/DevTools/Redux/ReduxTool.cs" Line="246" Column="2" />
       <File FileName="src/DevTools/StateTree/StateTreeTool.cs" />
       <File FileName="src/DevTools/Redux/ReduxMessage.cs" />
       <File FileName="src/DevTools/Redux/IReduxMessage.cs" />
       <File FileName="test/DevTools.Tests/Models/Todo.cs" />
-      <File FileName="test/DevTools.Tests/TestReduxTool.cs" Line="252" Column="1" />
+      <File FileName="test/DevTools.Tests/TestReduxTool.cs" Line="9" Column="42" />
       <File FileName="test/DevTools.Tests/Models/TodoStore.cs" />
       <File FileName="test/DevTools.Tests/MockJSRuntime.cs" Line="6" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Skclusive.Script.DevTools" expanded="True">
-            <Node name="src" expanded="True">
-              <Node name="DevTools" expanded="True">
-                <Node name="Redux" expanded="True" />
-                <Node name="StateTree" expanded="True" />
-              </Node>
-            </Node>
-            <Node name="test" expanded="True">
-              <Node name="DevTools.Tests" expanded="True">
-                <Node name="Models" expanded="True" />
-                <Node name="TestReduxTool.cs" selected="True" />
-              </Node>
-            </Node>
-          </Node>
+          <Node name="Skclusive.Script.DevTools" expanded="True" />
         </State>
       </Pad>
       <Pad Id="MonoDevelop.UnitTesting.TestPad">

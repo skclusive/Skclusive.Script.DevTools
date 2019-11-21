@@ -9,7 +9,7 @@
       "Skclusive.Script.DevTools.Tests/1.0.0": {
         "dependencies": {
           "Microsoft.NET.Test.Sdk": "15.7.0",
-          "Skclusive.Script.DevTools": "1.0.1",
+          "Skclusive.Script.DevTools": "1.0.2",
           "xunit": "2.3.1",
           "xunit.runner.visualstudio": "2.3.1"
         },
@@ -508,7 +508,7 @@
           }
         }
       },
-      "Skclusive.Mobx.StateTree/1.0.2": {
+      "Skclusive.Mobx.StateTree/1.0.3": {
         "dependencies": {
           "Microsoft.CSharp": "4.6.0",
           "Skclusive.Mobx.Observable": "1.0.2",
@@ -516,8 +516,8 @@
         },
         "runtime": {
           "lib/netstandard2.0/Skclusive.Mobx.StateTree.dll": {
-            "assemblyVersion": "1.0.2.0",
-            "fileVersion": "1.0.2.0"
+            "assemblyVersion": "1.0.3.0",
+            "fileVersion": "1.0.3.0"
           }
         }
       },
@@ -1188,13 +1188,13 @@
           "Microsoft.NET.Test.Sdk": "15.7.0"
         }
       },
-      "Skclusive.Script.DevTools/1.0.1": {
+      "Skclusive.Script.DevTools/1.0.2": {
         "dependencies": {
           "Microsoft.AspNetCore.Components": "3.1.0-preview3.19555.2",
           "Microsoft.AspNetCore.Components.Web": "3.1.0-preview3.19555.2",
           "Newtonsoft.Json": "12.0.2",
           "Skclusive.Core.Component": "1.0.1",
-          "Skclusive.Mobx.StateTree": "1.0.2"
+          "Skclusive.Mobx.StateTree": "1.0.3"
         },
         "runtime": {
           "Skclusive.Script.DevTools.dll": {}
@@ -1397,12 +1397,12 @@
       "path": "skclusive.mobx.observable/1.0.2",
       "hashPath": "skclusive.mobx.observable.1.0.2.nupkg.sha512"
     },
-    "Skclusive.Mobx.StateTree/1.0.2": {
+    "Skclusive.Mobx.StateTree/1.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-5Db6IfGz9SXlRCVrLohj8unu6zKV78sw+1ZxQhRxDE8S7sgs1CVVVmxIQmoAFM9cpjm3VHRiYOda1wKjo7Bn4g==",
-      "path": "skclusive.mobx.statetree/1.0.2",
-      "hashPath": "skclusive.mobx.statetree.1.0.2.nupkg.sha512"
+      "sha512": "sha512-r7rJKuHOde0Jp70f1DTzjTNCby6gGQVFymeXVPS2kYL27McG1MYIQNIlANu6WJg3aZw/i4lqlIPQDMVb8peQYw==",
+      "path": "skclusive.mobx.statetree/1.0.3",
+      "hashPath": "skclusive.mobx.statetree.1.0.3.nupkg.sha512"
     },
     "System.AppContext/4.1.0": {
       "type": "package",
@@ -1880,7 +1880,7 @@
       "path": "xunit.runner.visualstudio/2.3.1",
       "hashPath": "xunit.runner.visualstudio.2.3.1.nupkg.sha512"
     },
-    "Skclusive.Script.DevTools/1.0.1": {
+    "Skclusive.Script.DevTools/1.0.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
