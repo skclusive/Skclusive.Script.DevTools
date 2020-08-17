@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DevTools\DevTools.csproj" />
+    <ProjectReference Include="..\..\src\DevTools.csproj" />
   </ItemGroup>
 
 </Project>
