@@ -8,8 +8,10 @@ namespace Skclusive.Script.DevTools
 {
     public static class DevToolsExtension
     {
-        public static void TryAddDevToolsServices(this IServiceCollection services)
+        public static void TryAddDevToolsServices(this IServiceCollection services, ICoreConfig config)
         {
+            services.TryAddCoreServices(config);
+
             services.TryAddScoped(typeof(IReduxTool<,>), typeof(ReduxTool<,>));
 
             services.TryAddScoped(typeof(IStateTreeTool<>), typeof(StateTreeTool<>));
