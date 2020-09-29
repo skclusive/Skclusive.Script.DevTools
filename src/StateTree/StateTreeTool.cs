@@ -42,21 +42,20 @@ namespace Skclusive.Script.DevTools.StateTree
 
         private bool ApplyingSnapshot { set; get; }
 
+        private List<(StateTreeToolAction action, S snapshot)> Buffered = new List<(StateTreeToolAction action, S snapshot)>();
+
+        private IDisposable BufferDisposable { set; get; }
+
         public StateTreeTool(IReduxTool<StateTreeToolAction, S> reduxTool)
         {
             ReduxTool = reduxTool;
         }
 
-        public Task ConnectAsync(object node)
-        {
-            return ConnectAsync(node, new StateTreeConnectOptions { LogArgsNearName = true, LogChildActions = false, LogIdempotentActionSteps = true });
-        }
-
-        public async Task ConnectAsync(object node, StateTreeConnectOptions options)
+        public void Configure(object node, StateTreeConnectOptions options = null)
         {
             _node = node;
 
-            Options = options;
+            Options = options ?? new StateTreeConnectOptions { LogArgsNearName = true, LogChildActions = false, LogIdempotentActionSteps = true };
 
             ReduxTool.OnStart += OnStart;
 
@@ -66,14 +65,52 @@ namespace Skclusive.Script.DevTools.StateTree
 
             ReduxTool.OnState += OnState;
 
-            await ReduxTool.ConnectAsync(Node.GetType().Name);
-
             InitialState = Node.GetSnapshot<S>();
+
+            BufferDisposable = Node.OnAction((call) =>
+            {
+                var action = new StateTreeToolAction
+                {
+                    Type = $"{call.Path}/{call.Name}",
+
+                    Args = call.Arguments.ToList()
+                };
+
+                var snapshot =  Node.GetSnapshot<S>();
+
+                Buffered.Add((action, snapshot));
+            }, true);
+        }
+
+        public async Task ConnectAsync()
+        {
+            await ReduxTool.ConnectAsync(Node.GetType().Name);
+        }
+
+        private async Task FlushBuffered()
+        {
+            foreach (var buffer in Buffered)
+            {
+                await ReduxTool.SendAsync(buffer.action, buffer.snapshot);
+            }
+
+            BufferDisposable.Dispose();
+
+            Buffered.Clear();
+
+            Buffered = null;
         }
 
         private void OnStart(object sender, EventArgs e)
         {
-            _ = ReduxTool.InitAsync(InitialState);
+           _ = OnStartAsync();
+        }
+
+        private async Task OnStartAsync()
+        {
+            await ReduxTool.InitAsync(InitialState);
+
+            await FlushBuffered();
 
             Node.OnAction((call) =>
             {
