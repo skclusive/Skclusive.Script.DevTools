@@ -14,7 +14,7 @@ namespace Skclusive.Script.DevTools.Redux
         Disposed
     }
 
-    public interface IReduxTool<T, S> : IDisposable where T : class where S : class
+    public interface IReduxTool<T, S> : IAsyncDisposable where T : class where S : class
     {
         ReduxStatus Status { get; }
 

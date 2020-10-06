@@ -21,7 +21,7 @@ namespace Skclusive.Script.DevTools.StateTree
         public bool LogArgsNearName { set; get; }
     }
 
-    public interface IStateTreeTool<S> : IDisposable where S : class
+    public interface IStateTreeTool<S> : IAsyncDisposable where S : class
     {
         void Configure(object node, StateTreeConnectOptions options = null);
 

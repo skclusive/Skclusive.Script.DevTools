@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Skclusive.Core.Component;
 
 namespace Skclusive.Script.DevTools.Redux
 {
     public class ReduxTool<T, S> : IReduxTool<T, S> where T : class where S : class
     {
-        public ReduxTool(IJSRuntime jsruntime, IEnumerable<JsonConverter> converters)
+        public ReduxTool(IScriptService scriptService, IEnumerable<JsonConverter> converters)
         {
-            JSRuntime = jsruntime;
+            ScriptService = scriptService;
 
             SerializerSettings = new JsonSerializerSettings
             {
@@ -30,7 +31,7 @@ namespace Skclusive.Script.DevTools.Redux
 
         public ReduxStatus Status { get; private set; } = ReduxStatus.Idle;
 
-        private IJSRuntime JSRuntime { get; }
+        private IScriptService ScriptService { get; }
 
         public event EventHandler OnStart;
 
@@ -193,12 +194,12 @@ namespace Skclusive.Script.DevTools.Redux
 
             Status = ReduxStatus.Requested;
 
-            Id = await JSRuntime.InvokeAsync<object>("Skclusive.Script.DevTools.Redux.connect", DotNetObjectReference.Create(this), name);
+            Id = await ScriptService.InvokeAsync<object>("Skclusive.Script.DevTools.Redux.connect", DotNetObjectReference.Create(this), name);
         }
 
         private async Task SendAsync(string action, string state)
         {
-            await JSRuntime.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.send", Id, action, state);
+            await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.send", Id, action, state);
         }
 
         private string Serialize(object value)
@@ -233,13 +234,13 @@ namespace Skclusive.Script.DevTools.Redux
             }
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             Status = ReduxStatus.Disposed;
 
             if (Status == ReduxStatus.Connected)
             {
-                _ = JSRuntime.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.dispose", Id);
+                await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.dispose", Id);
             }
         }
     }

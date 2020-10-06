@@ -179,10 +179,10 @@ namespace Skclusive.Script.DevTools.StateTree
             ApplyingSnapshot = false;
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             if (ReduxTool == null)
-                throw new Exception("ReduxTool is not available or disposed");
+                return;
 
             ReduxTool.OnStart -= OnStart;
 
@@ -192,7 +192,7 @@ namespace Skclusive.Script.DevTools.StateTree
 
             ReduxTool.OnState -= OnState;
 
-            ReduxTool.Dispose();
+            await ReduxTool.DisposeAsync();
 
             ReduxTool = null;
         }
