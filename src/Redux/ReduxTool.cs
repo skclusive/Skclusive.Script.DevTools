@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Skclusive.Core.Component;
 
 namespace Skclusive.Script.DevTools.Redux
@@ -15,15 +15,13 @@ namespace Skclusive.Script.DevTools.Redux
         {
             ScriptService = scriptService;
 
-            SerializerSettings = new JsonSerializerSettings
+            SerializerOptions = new JsonSerializerOptions
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-
-                // TypeNameHandling = TypeNameHandling.All
+                PropertyNameCaseInsensitive = true
             };
             foreach(var converter in converters)
             {
-                SerializerSettings.Converters.Add(converter);
+                SerializerOptions.Converters.Add(converter);
             }
         }
 
@@ -47,7 +45,7 @@ namespace Skclusive.Script.DevTools.Redux
 
         private readonly static EventArgs EVENT_ARGS = new EventArgs();
 
-        private JsonSerializerSettings SerializerSettings { get; }
+        private JsonSerializerOptions SerializerOptions { get; }
 
         [JSInvokable]
         public Task OnMessageAsync(string json)
@@ -204,12 +202,12 @@ namespace Skclusive.Script.DevTools.Redux
 
         private string Serialize(object value)
         {
-            return JsonConvert.SerializeObject(value, SerializerSettings);
+            return JsonSerializer.Serialize(value, SerializerOptions);
         }
 
         private X Deserialize<X>(string json)
         {
-            return JsonConvert.DeserializeObject<X>(json, SerializerSettings);
+            return JsonSerializer.Deserialize<X>(json, SerializerOptions);
         }
 
         public Task SendAsync(T action, S state)

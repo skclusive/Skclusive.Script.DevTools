@@ -1,24 +1,20 @@
 using System;
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Skclusive.Script.DevTools
 {
-    public class JsonTypeConverter<I, T> : JsonConverter
+    public class JsonTypeConverter<I, T> : JsonConverter<I>
         where T : class, I
     {
-        public override bool CanConvert(Type objectType)
+        public override I Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return (objectType == typeof(I));
+            return JsonSerializer.Deserialize<T>(ref reader, options);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        public override void Write(Utf8JsonWriter writer, I value, JsonSerializerOptions options)
         {
-            return serializer.Deserialize(reader, typeof(T));
-        }
-
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-        {
-            serializer.Serialize(writer, value, typeof(T));
+            JsonSerializer.Serialize(writer, value, typeof(T), options);
         }
     }
 }
