@@ -17,7 +17,9 @@ namespace Skclusive.Script.DevTools.Redux
 
             SerializerOptions = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true
+                PropertyNameCaseInsensitive = true,
+
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
             foreach(var converter in converters)
             {
@@ -83,7 +85,9 @@ namespace Skclusive.Script.DevTools.Redux
 
             onPush?.Invoke(this, json);
 
-            switch (message.Payload?.Type)
+            var type = message.Payload?.Type;
+
+            switch (type)
             {
                 case "RESET":
                 {
@@ -192,12 +196,12 @@ namespace Skclusive.Script.DevTools.Redux
 
             Status = ReduxStatus.Requested;
 
-            Id = await ScriptService.InvokeAsync<object>("Skclusive.Script.DevTools.Redux.connect", DotNetObjectReference.Create(this), name);
+            Id = await ScriptService.InvokeAsync<object>("Skclusive.Script.DevTools.ReduxTool.connect", DotNetObjectReference.Create(this), name);
         }
 
         private async Task SendAsync(string action, string state)
         {
-            await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.send", Id, action, state);
+            await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.ReduxTool.send", Id, action, state);
         }
 
         private string Serialize(object value)
@@ -238,7 +242,7 @@ namespace Skclusive.Script.DevTools.Redux
 
             if (Status == ReduxStatus.Connected)
             {
-                await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.dispose", Id);
+                await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.ReduxTool.dispose", Id);
             }
         }
     }

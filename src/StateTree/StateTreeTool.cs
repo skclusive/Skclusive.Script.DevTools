@@ -108,24 +108,33 @@ namespace Skclusive.Script.DevTools.StateTree
 
         private async Task OnStartAsync()
         {
-            await ReduxTool.InitAsync(InitialState);
-
-            await FlushBuffered();
-
-            Node.OnAction((call) =>
+            try
             {
-                if (ApplyingSnapshot)
-                    return;
+                await ReduxTool.InitAsync(InitialState);
 
-                var action = new StateTreeToolAction
+                await FlushBuffered();
+
+                Node.OnAction((call) =>
                 {
-                    Type = $"{call.Path}/{call.Name}",
+                    if (ApplyingSnapshot)
+                        return;
 
-                    Args = call.Arguments.ToList()
-                };
+                    var action = new StateTreeToolAction
+                    {
+                        Type = $"{call.Path}/{call.Name}",
 
-                _ = ReduxTool.SendAsync(action, Node.GetSnapshot<S>());
-            }, true);
+                        Args = call.Arguments.ToList()
+                    };
+
+                    _ = ReduxTool.SendAsync(action, Node.GetSnapshot<S>());
+                }, true);
+
+            } catch (Exception ex)
+            {
+                System.Console.Error.WriteLine(ex.Message);
+
+                throw;
+            }
         }
 
         private void OnState(object sender, IReduxMessage<S> message)

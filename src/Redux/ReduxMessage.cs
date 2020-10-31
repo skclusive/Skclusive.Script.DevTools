@@ -38,7 +38,7 @@ namespace Skclusive.Script.DevTools.Redux
     {
         public string Type { get; set; }
 
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public string Source { get; set; }
 

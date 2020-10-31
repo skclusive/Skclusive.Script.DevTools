@@ -1,71 +1,73 @@
-﻿function generateId() {
-  return Math.random()
-    .toString(36)
-    .substr(2);
+﻿// @ts-check
+
+function generateId() {
+  return Math.random().toString(36).substr(2);
 }
 
-const connectionPool = {};
+export class ReduxTool {
+  static cache = {};
 
-function connect(target, name) {
-  try {
-    const id = generateId();
-    const extension = window.__REDUX_DEVTOOLS_EXTENSION__;
-    if (extension) {
-      const devTools = extension.connect({ name: name });
-      const unsubscribe = devTools.subscribe(subscriper(target));
-      connectionPool[id] = { id, target, name, unsubscribe, devTools };
-      return id;
+  static connect(target, name) {
+    try {
+      const id = generateId();
+      // @ts-ignore
+      const extension = window.__REDUX_DEVTOOLS_EXTENSION__;
+      if (extension) {
+        const devTools = extension.connect({ name: name });
+        const unsubscribe = devTools.subscribe(ReduxTool.callback(id));
+        ReduxTool.cache[id] = {
+          id,
+          target,
+          name,
+          unsubscribe,
+          devTools,
+        };
+        return id;
+      }
+    } catch (ex) {
+      console.error(ex);
     }
-  } catch (ex) {
-    console.error(ex);
+    return -1;
   }
-  return -1;
-}
 
-function subscriper(target) {
-  return function callback(message) {
-      onMessage(message);
-  };
-
-  function onMessage(state) {
-    target.invokeMethodAsync(
-      'OnMessageAsync',
-      JSON.stringify(state)
-    );
+  static callback(id) {
+    return function callback(message) {
+      const { target } = ReduxTool.cache[id];
+      target.invokeMethodAsync("OnMessageAsync", JSON.stringify(message));
+    };
   }
-}
 
-function send(id, action, state) {
-  const record = connectionPool[id];
-  if (record) {
-    const json = JSON.parse(state);
-    const devTools = record.devTools;
-    if (action === 'initial') {
-      devTools.init(json);
-    } else {
-      devTools.send(JSON.parse(action), json);
-    }
-  }
-}
-
-function dispose(id) {
-  const record = connectionPool[id];
-  if (record) {
-    record.unsubscribe();
-    connectionPool[id] = undefined;
-  }
-}
-
-window.Skclusive = {
-  ...window.Skclusive,
-  Script: {
-    ...((window.Skclusive || {}).Script),
-    DevTools: {
-      Redux: {
-        connect,
-        send,
-        dispose
+  static send(id, action, state) {
+    const record = ReduxTool.cache[id];
+    if (record) {
+      const json = JSON.parse(state);
+      const devTools = record.devTools;
+      if (action === "initial") {
+        devTools.init(json);
+      } else {
+        devTools.send(JSON.parse(action), json);
       }
     }
   }
+
+  static dispose(id) {
+    const record = ReduxTool.cache[id];
+    if (record) {
+      record.unsubscribe();
+    }
+    delete ReduxTool.cache[id];
+  }
+}
+
+// @ts-ignore
+window.Skclusive = {
+  // @ts-ignore
+  ...window.Skclusive,
+  Script: {
+    // @ts-ignore
+    ...(window.Skclusive || {}).Script,
+    DevTools: {
+      ReduxTool,
+    },
+  },
 };

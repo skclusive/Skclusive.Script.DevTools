@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Skclusive.Script.DevTools.Redux;
 using Xunit;
-using Newtonsoft.Json;
 using System.Linq;
 using Skclusive.Core.Component;
+using System.Text.Json.Serialization;
 
 namespace Skclusive.Script.DevTools.Tests
 {
@@ -28,9 +28,9 @@ namespace Skclusive.Script.DevTools.Tests
         {
             MockJSRuntime mockJsRuntime = new MockJSRuntime();
 
-            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(new ScriptService(mockJsRuntime)), Enumerable.Empty<JsonConverter>());
+            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.connect", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
                 Assert.Equal(2, args.Length);
 
@@ -57,7 +57,7 @@ namespace Skclusive.Script.DevTools.Tests
 
             ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.connect", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
                 return 1;
             });
@@ -80,7 +80,7 @@ namespace Skclusive.Script.DevTools.Tests
 
             ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.connect", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
                 return 1;
             });
@@ -104,7 +104,7 @@ namespace Skclusive.Script.DevTools.Tests
             }
             ");
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.send", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.send", (args) =>
             {
                 Assert.Equal(3, args.Length);
 
@@ -128,7 +128,7 @@ namespace Skclusive.Script.DevTools.Tests
 
             ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.connect", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
                 return 1;
             });
@@ -156,7 +156,7 @@ namespace Skclusive.Script.DevTools.Tests
 
             await reduxTool.InitAsync(initialState);
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.send", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.send", (args) =>
             {
                 Assert.Equal(3, args.Length);
 
@@ -179,7 +179,7 @@ namespace Skclusive.Script.DevTools.Tests
 
             ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.connect", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
                 return 1;
             });
@@ -207,7 +207,7 @@ namespace Skclusive.Script.DevTools.Tests
 
             await reduxTool.InitAsync(initialState);
 
-            mockJsRuntime.AddAction("Skclusive.Script.DevTools.Redux.send", (args) =>
+            mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.send", (args) =>
             {
                 Assert.Equal(3, args.Length);
 
