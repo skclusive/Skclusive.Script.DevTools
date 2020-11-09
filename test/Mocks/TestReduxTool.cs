@@ -5,6 +5,7 @@ using Skclusive.Script.DevTools.Redux;
 using Xunit;
 using System.Linq;
 using Skclusive.Core.Component;
+using Skclusive.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Skclusive.Script.DevTools.Tests
@@ -28,7 +29,7 @@ namespace Skclusive.Script.DevTools.Tests
         {
             MockJSRuntime mockJsRuntime = new MockJSRuntime();
 
-            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
+            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), new JsonService(Enumerable.Empty<JsonConverter>()));
 
             mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
@@ -55,7 +56,7 @@ namespace Skclusive.Script.DevTools.Tests
         {
             MockJSRuntime mockJsRuntime = new MockJSRuntime();
 
-            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
+            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), new JsonService(Enumerable.Empty<JsonConverter>()));
 
             mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
@@ -78,7 +79,7 @@ namespace Skclusive.Script.DevTools.Tests
         {
             MockJSRuntime mockJsRuntime = new MockJSRuntime();
 
-            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
+            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), new JsonService(Enumerable.Empty<JsonConverter>()));
 
             mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
@@ -126,7 +127,7 @@ namespace Skclusive.Script.DevTools.Tests
         {
             MockJSRuntime mockJsRuntime = new MockJSRuntime();
 
-            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
+            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), new JsonService(Enumerable.Empty<JsonConverter>()));
 
             mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {
@@ -177,7 +178,7 @@ namespace Skclusive.Script.DevTools.Tests
         {
             MockJSRuntime mockJsRuntime = new MockJSRuntime();
 
-            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), Enumerable.Empty<JsonConverter>());
+            ReduxTool<TestAction, TestState> reduxTool = new ReduxTool<TestAction, TestState>(new ScriptService(mockJsRuntime), new JsonService(Enumerable.Empty<JsonConverter>()));
 
             mockJsRuntime.AddAction("Skclusive.Script.DevTools.ReduxTool.connect", (args) =>
             {

@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Skclusive.Script.DevTools.Redux;
 using Skclusive.Script.DevTools.StateTree;
 using Skclusive.Core.Component;
+using Skclusive.Text.Json;
 
 namespace Skclusive.Script.DevTools
 {
@@ -12,11 +13,13 @@ namespace Skclusive.Script.DevTools
         {
             services.TryAddCoreServices(config);
 
+            services.TryAddJsonServices();
+
             services.TryAddScoped(typeof(IReduxTool<,>), typeof(ReduxTool<,>));
 
             services.TryAddScoped(typeof(IStateTreeTool<>), typeof(StateTreeTool<>));
 
-            services.AddSingleton<IScriptTypeProvider, DevToolsScriptProvider>();
+            services.TryAddScriptTypeProvider<DevToolsScriptProvider>();
         }
     }
 }

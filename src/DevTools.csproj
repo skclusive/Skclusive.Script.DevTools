@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <VersionPrefix>5.0.0-rc3</VersionPrefix>
+    <VersionPrefix>5.0.0-rc4</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Skclusive.Script.DevTools</AssemblyName>
@@ -17,18 +17,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Skclusive.Core.Component" Version="5.0.0-rc1" />
-    <PackageReference Include="Skclusive.Mobx.StateTree" Version="5.0.0-rc3" />
+    <PackageReference Include="Skclusive.Core.Component" Version="5.0.0-rc4" />
+    <PackageReference Include="Skclusive.Mobx.StateTree" Version="5.0.0-rc4" />
+    <PackageReference Include="Skclusive.Text.Json" Version="5.0.0-rc4" />
   </ItemGroup>
 
   <!-- <ItemGroup>
-    <ProjectReference Include="..\..\Skclusive.Mobx.StateTree\src\StateTree.csproj" Version="5.0.0-rc1" />
-    <ProjectReference Include="..\..\Skclusive.Core.Component\src\Component.csproj" Version="5.0.0-rc3" />
+    <ProjectReference Include="..\..\Skclusive.Core.Component\src\Component.csproj" Version="5.0.0-rc4" />
+    <ProjectReference Include="..\..\Skclusive.Mobx.StateTree\src\StateTree.csproj" Version="5.0.0-rc4" />
+    <ProjectReference Include="..\..\Skclusive.Text.Json\src\Json.csproj" Version="5.0.0-rc4" />
   </ItemGroup> -->
 
   <Target Name="BuildFrontend" BeforeTargets="Build">
     <Exec Command="npm install" />
     <Exec Command="npm run build" />
   </Target>
+
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);package.json;package-lock.json;node_modules\**\*</DefaultItemExcludes>
+  </PropertyGroup>
 
 </Project>

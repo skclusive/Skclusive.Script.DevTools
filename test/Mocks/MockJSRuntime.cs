@@ -8,11 +8,11 @@ namespace Skclusive.Script.DevTools.Tests
 {
     public class MockJSRuntime : IJSRuntime
     {
-        private IDictionary<string, Func<object[], object>> Actions = new Dictionary<string, Func<object[], object>>();
+        private readonly IDictionary<string, Func<object[], object>> Actions = new Dictionary<string, Func<object[], object>>();
 
         public ValueTask<TValue> InvokeAsync<TValue>(string identifier, object[] args)
         {
-            return InvokeAsync<TValue>(identifier, default(CancellationToken), args);
+            return InvokeAsync<TValue>(identifier, default, args);
         }
 
         public ValueTask<TValue> InvokeAsync<TValue>(string identifier, CancellationToken cancellationToken, object[] args)

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Skclusive.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using Skclusive.Core.Component;
@@ -11,20 +10,11 @@ namespace Skclusive.Script.DevTools.Redux
 {
     public class ReduxTool<T, S> : IReduxTool<T, S> where T : class where S : class
     {
-        public ReduxTool(IScriptService scriptService, IEnumerable<JsonConverter> converters)
+        public ReduxTool(IScriptService scriptService, IJsonService jsonService)
         {
             ScriptService = scriptService;
 
-            SerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            };
-            foreach(var converter in converters)
-            {
-                SerializerOptions.Converters.Add(converter);
-            }
+            JsonService = jsonService;
         }
 
         private object Id;
@@ -32,6 +22,8 @@ namespace Skclusive.Script.DevTools.Redux
         public ReduxStatus Status { get; private set; } = ReduxStatus.Idle;
 
         private IScriptService ScriptService { get; }
+
+        private IJsonService JsonService { get; }
 
         public event EventHandler OnStart;
 
@@ -46,8 +38,6 @@ namespace Skclusive.Script.DevTools.Redux
         public event EventHandler<IReduxMessage<IReduxToggleState<T, S>>> OnToggle;
 
         private readonly static EventArgs EVENT_ARGS = new EventArgs();
-
-        private JsonSerializerOptions SerializerOptions { get; }
 
         [JSInvokable]
         public Task OnMessageAsync(string json)
@@ -206,12 +196,12 @@ namespace Skclusive.Script.DevTools.Redux
 
         private string Serialize(object value)
         {
-            return JsonSerializer.Serialize(value, SerializerOptions);
+            return JsonService.Serialize(value);
         }
 
         private X Deserialize<X>(string json)
         {
-            return JsonSerializer.Deserialize<X>(json, SerializerOptions);
+            return JsonService.Deserialize<X>(json);
         }
 
         public Task SendAsync(T action, S state)
