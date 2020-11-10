@@ -42,21 +42,20 @@ namespace Skclusive.Script.DevTools.StateTree
 
         private bool ApplyingSnapshot { set; get; }
 
+        private List<(StateTreeToolAction action, S snapshot)> Buffered = new List<(StateTreeToolAction action, S snapshot)>();
+
+        private IDisposable BufferDisposable { set; get; }
+
         public StateTreeTool(IReduxTool<StateTreeToolAction, S> reduxTool)
         {
             ReduxTool = reduxTool;
         }
 
-        public Task ConnectAsync(object node)
-        {
-            return ConnectAsync(node, new StateTreeConnectOptions { LogArgsNearName = true, LogChildActions = false, LogIdempotentActionSteps = true });
-        }
-
-        public async Task ConnectAsync(object node, StateTreeConnectOptions options)
+        public void Configure(object node, StateTreeConnectOptions options = null)
         {
             _node = node;
 
-            Options = options;
+            Options = options ?? new StateTreeConnectOptions { LogArgsNearName = true, LogChildActions = false, LogIdempotentActionSteps = true };
 
             ReduxTool.OnStart += OnStart;
 
@@ -66,20 +65,10 @@ namespace Skclusive.Script.DevTools.StateTree
 
             ReduxTool.OnState += OnState;
 
-            await ReduxTool.ConnectAsync(Node.GetType().Name);
-
             InitialState = Node.GetSnapshot<S>();
-        }
 
-        private void OnStart(object sender, EventArgs e)
-        {
-            _ = ReduxTool.InitAsync(InitialState);
-
-            Node.OnAction((call) =>
+            BufferDisposable = Node.OnAction((call) =>
             {
-                if (ApplyingSnapshot)
-                    return;
-
                 var action = new StateTreeToolAction
                 {
                     Type = $"{call.Path}/{call.Name}",
@@ -87,8 +76,65 @@ namespace Skclusive.Script.DevTools.StateTree
                     Args = call.Arguments.ToList()
                 };
 
-                _ = ReduxTool.SendAsync(action, Node.GetSnapshot<S>());
+                var snapshot =  Node.GetSnapshot<S>();
+
+                Buffered.Add((action, snapshot));
             }, true);
+        }
+
+        public async Task ConnectAsync()
+        {
+            await ReduxTool.ConnectAsync(Node.GetType().Name);
+        }
+
+        private async Task FlushBuffered()
+        {
+            foreach (var buffer in Buffered)
+            {
+                await ReduxTool.SendAsync(buffer.action, buffer.snapshot);
+            }
+
+            BufferDisposable.Dispose();
+
+            Buffered.Clear();
+
+            Buffered = null;
+        }
+
+        private void OnStart(object sender, EventArgs e)
+        {
+           _ = OnStartAsync();
+        }
+
+        private async Task OnStartAsync()
+        {
+            try
+            {
+                await ReduxTool.InitAsync(InitialState);
+
+                await FlushBuffered();
+
+                Node.OnAction((call) =>
+                {
+                    if (ApplyingSnapshot)
+                        return;
+
+                    var action = new StateTreeToolAction
+                    {
+                        Type = $"{call.Path}/{call.Name}",
+
+                        Args = call.Arguments.ToList()
+                    };
+
+                    _ = ReduxTool.SendAsync(action, Node.GetSnapshot<S>());
+                }, true);
+
+            } catch (Exception ex)
+            {
+                System.Console.Error.WriteLine(ex.Message);
+
+                throw;
+            }
         }
 
         private void OnState(object sender, IReduxMessage<S> message)
@@ -142,10 +188,10 @@ namespace Skclusive.Script.DevTools.StateTree
             ApplyingSnapshot = false;
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             if (ReduxTool == null)
-                throw new Exception("ReduxTool is not available or disposed");
+                return;
 
             ReduxTool.OnStart -= OnStart;
 
@@ -155,7 +201,7 @@ namespace Skclusive.Script.DevTools.StateTree
 
             ReduxTool.OnState -= OnState;
 
-            ReduxTool.Dispose();
+            await ReduxTool.DisposeAsync();
 
             ReduxTool = null;
         }

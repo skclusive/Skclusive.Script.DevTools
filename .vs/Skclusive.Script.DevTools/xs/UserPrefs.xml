@@ -1,26 +1,37 @@
-﻿<Properties StartupConfiguration="{9222F381-62F3-44CB-939E-290DE4D5EFED}|Default">
+﻿<Properties StartupConfiguration="{01CF53CB-9792-4E22-9BA7-F591D8BDDB3B}|Default">
   <MonoDevelop.Ide.ItemProperties.test.DevTools.Tests PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="test/DevTools.Tests/TestReduxTool.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="src/StateTree/StateTreeTool.cs">
     <Files>
-      <File FileName="src/DevTools/Redux/ReduxTool.cs" Line="246" Column="2" />
-      <File FileName="src/DevTools/StateTree/StateTreeTool.cs" />
-      <File FileName="src/DevTools/Redux/ReduxMessage.cs" />
-      <File FileName="src/DevTools/Redux/IReduxMessage.cs" />
-      <File FileName="test/DevTools.Tests/Models/Todo.cs" />
-      <File FileName="test/DevTools.Tests/TestReduxTool.cs" Line="9" Column="42" />
-      <File FileName="test/DevTools.Tests/Models/TodoStore.cs" />
-      <File FileName="test/DevTools.Tests/MockJSRuntime.cs" Line="6" Column="1" />
+      <File FileName="test/Mocks/TestReduxTool.cs" Line="180" Column="1" />
+      <File FileName="test/Mocks/MockJSRuntime.cs" Line="1" Column="1" />
+      <File FileName="src/Redux/ReduxTool.cs" Line="214" Column="1" />
+      <File FileName="src/StateTree/StateTreeTool.cs" Line="49" Column="74" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="Skclusive.Script.DevTools" expanded="True" />
+          <Node name="Skclusive.Script.DevTools" expanded="True">
+            <Node name="DevTools" expanded="True">
+              <Node name="Redux" expanded="True" />
+              <Node name="StateTree" expanded="True">
+                <Node name="StateTreeTool.cs" selected="True" />
+              </Node>
+            </Node>
+            <Node name="DevTools.Tests" expanded="True">
+              <Node name="Mocks" expanded="True" />
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
       <Pad Id="MonoDevelop.UnitTesting.TestPad">
         <State name="__root__">
           <Node name="Skclusive.Script.DevTools" expanded="True" selected="True">
-            <Node name="test" expanded="True" />
+            <Node name="DevTools.Tests" expanded="True">
+              <Node name="Skclusive.Script.DevTools.Tests" expanded="True">
+                <Node name="TestReduxTool" expanded="True" />
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>
@@ -28,8 +39,11 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.DevTools.Tests PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/senthilnathansk/Desktop/github/Skclusive.Script.DevTools/src/Redux/ReduxTool.cs" relfile="src/Redux/ReduxTool.cs" line="16" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

@@ -21,14 +21,10 @@ namespace Skclusive.Script.DevTools.StateTree
         public bool LogArgsNearName { set; get; }
     }
 
-    public interface IStateTreeTool<S> : IDisposable where S : class
+    public interface IStateTreeTool<S> : IAsyncDisposable where S : class
     {
-        Task ConnectAsync(object node);
+        void Configure(object node, StateTreeConnectOptions options = null);
 
-        Task ConnectAsync(object node, StateTreeConnectOptions options);
-
-        // Task ConnectAsync(IStateTreeNode node);
-
-        // Task ConnectAsync(IStateTreeNode node, StateTreeConnectOptions options);
+        Task ConnectAsync();
     }
 }

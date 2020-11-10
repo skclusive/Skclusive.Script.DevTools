@@ -29,7 +29,7 @@ namespace Skclusive.Script.DevTools.Redux
 
         IReduxPayload<S> Payload { get; }
 
-        int Id { get; }
+        string Id { get; }
 
         string Source { get; }
 

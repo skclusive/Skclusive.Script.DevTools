@@ -1,36 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Skclusive.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.JSInterop;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using Skclusive.Core.Component;
 
 namespace Skclusive.Script.DevTools.Redux
 {
     public class ReduxTool<T, S> : IReduxTool<T, S> where T : class where S : class
     {
-        public ReduxTool(IJSRuntime jsruntime, IEnumerable<JsonConverter> converters)
+        public ReduxTool(IScriptService scriptService, IJsonService jsonService)
         {
-            JSRuntime = jsruntime;
+            ScriptService = scriptService;
 
-            SerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-
-                // TypeNameHandling = TypeNameHandling.All
-            };
-            foreach(var converter in converters)
-            {
-                SerializerSettings.Converters.Add(converter);
-            }
+            JsonService = jsonService;
         }
 
         private object Id;
 
         public ReduxStatus Status { get; private set; } = ReduxStatus.Idle;
 
-        private IJSRuntime JSRuntime { get; }
+        private IScriptService ScriptService { get; }
+
+        private IJsonService JsonService { get; }
 
         public event EventHandler OnStart;
 
@@ -45,8 +38,6 @@ namespace Skclusive.Script.DevTools.Redux
         public event EventHandler<IReduxMessage<IReduxToggleState<T, S>>> OnToggle;
 
         private readonly static EventArgs EVENT_ARGS = new EventArgs();
-
-        private JsonSerializerSettings SerializerSettings { get; }
 
         [JSInvokable]
         public Task OnMessageAsync(string json)
@@ -84,7 +75,9 @@ namespace Skclusive.Script.DevTools.Redux
 
             onPush?.Invoke(this, json);
 
-            switch (message.Payload?.Type)
+            var type = message.Payload?.Type;
+
+            switch (type)
             {
                 case "RESET":
                 {
@@ -193,22 +186,22 @@ namespace Skclusive.Script.DevTools.Redux
 
             Status = ReduxStatus.Requested;
 
-            Id = await JSRuntime.InvokeAsync<object>("Skclusive.Script.DevTools.Redux.connect", DotNetObjectReference.Create(this), name);
+            Id = await ScriptService.InvokeAsync<object>("Skclusive.Script.DevTools.ReduxTool.connect", DotNetObjectReference.Create(this), name);
         }
 
         private async Task SendAsync(string action, string state)
         {
-            await JSRuntime.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.send", Id, action, state);
+            await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.ReduxTool.send", Id, action, state);
         }
 
         private string Serialize(object value)
         {
-            return JsonConvert.SerializeObject(value, SerializerSettings);
+            return JsonService.Serialize(value);
         }
 
         private X Deserialize<X>(string json)
         {
-            return JsonConvert.DeserializeObject<X>(json, SerializerSettings);
+            return JsonService.Deserialize<X>(json);
         }
 
         public Task SendAsync(T action, S state)
@@ -233,13 +226,13 @@ namespace Skclusive.Script.DevTools.Redux
             }
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             Status = ReduxStatus.Disposed;
 
             if (Status == ReduxStatus.Connected)
             {
-                _ = JSRuntime.InvokeVoidAsync("Skclusive.Script.DevTools.Redux.dispose", Id);
+                await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.ReduxTool.dispose", Id);
             }
         }
     }
