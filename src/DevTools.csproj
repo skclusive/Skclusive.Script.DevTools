@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <VersionPrefix>5.0.0-rc5</VersionPrefix>
+    <VersionPrefix>5.0.0</VersionPrefix>
     <VersionSuffix>$(VersionSuffix)</VersionSuffix>
     <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Skclusive.Script.DevTools</AssemblyName>
@@ -17,15 +17,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Skclusive.Core.Component" Version="5.0.0-rc4" />
-    <PackageReference Include="Skclusive.Mobx.StateTree" Version="5.0.0-rc4" />
-    <PackageReference Include="Skclusive.Text.Json" Version="5.0.0-rc5" />
+    <PackageReference Include="Skclusive.Core.Component" Version="5.0.0" />
+    <PackageReference Include="Skclusive.Mobx.StateTree" Version="5.0.0" />
+    <PackageReference Include="Skclusive.Text.Json" Version="5.0.0" />
   </ItemGroup>
 
   <!-- <ItemGroup>
-    <ProjectReference Include="..\..\Skclusive.Core.Component\src\Component.csproj" Version="5.0.0-rc4" />
-    <ProjectReference Include="..\..\Skclusive.Mobx.StateTree\src\StateTree.csproj" Version="5.0.0-rc4" />
-    <ProjectReference Include="..\..\Skclusive.Text.Json\src\Json.csproj" Version="5.0.0-rc5" />
+    <ProjectReference Include="..\..\Skclusive.Core.Component\src\Component.csproj" Version="5.0.0" />
+    <ProjectReference Include="..\..\Skclusive.Mobx.StateTree\src\StateTree.csproj" Version="5.0.0" />
+    <ProjectReference Include="..\..\Skclusive.Text.Json\src\Json.csproj" Version="5.0.0" />
   </ItemGroup> -->
 
   <Target Name="BuildFrontend" BeforeTargets="Build">
