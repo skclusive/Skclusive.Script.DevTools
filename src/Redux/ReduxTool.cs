@@ -8,7 +8,11 @@ using Skclusive.Core.Component;
 
 namespace Skclusive.Script.DevTools.Redux
 {
-    public class ReduxTool<T, S> : IReduxTool<T, S> where T : class where S : class
+    public class ReduxTool<T, S> : IReduxTool<T, S>
+    #if NETSTANDARD2_0
+        , IDisposable
+    #endif
+    where T : class where S : class
     {
         public ReduxTool(IScriptService scriptService, IJsonService jsonService)
         {
@@ -235,5 +239,17 @@ namespace Skclusive.Script.DevTools.Redux
                 await ScriptService.InvokeVoidAsync("Skclusive.Script.DevTools.ReduxTool.dispose", Id);
             }
         }
+
+        #if NETSTANDARD2_0
+
+        void IDisposable.Dispose()
+        {
+            if (this is IAsyncDisposable disposable)
+            {
+                _ = disposable.DisposeAsync();
+            }
+        }
+
+        #endif
     }
 }

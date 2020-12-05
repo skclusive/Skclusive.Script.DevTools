@@ -5,7 +5,7 @@ namespace Skclusive.Script.DevTools
 {
     public class DevToolsScriptProvider : ScriptTypeProvider
     {
-        public DevToolsScriptProvider() : base(typeof(ReduxToolScript))
+        public DevToolsScriptProvider() : base(priority: 1400, typeof(ReduxToolScript))
         {
         }
     }

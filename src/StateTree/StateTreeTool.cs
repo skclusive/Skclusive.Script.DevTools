@@ -7,7 +7,11 @@ using Skclusive.Script.DevTools.Redux;
 
 namespace Skclusive.Script.DevTools.StateTree
 {
-    public class StateTreeTool<S> : IStateTreeTool<S> where S : class
+    public class StateTreeTool<S> : IStateTreeTool<S>
+    #if NETSTANDARD2_0
+        , IDisposable
+    #endif
+    where S : class
     {
         public static string GetTypeName(IStateTreeNode node)
         {
@@ -205,5 +209,17 @@ namespace Skclusive.Script.DevTools.StateTree
 
             ReduxTool = null;
         }
+
+        #if NETSTANDARD2_0
+
+        void IDisposable.Dispose()
+        {
+            if (this is IAsyncDisposable disposable)
+            {
+                _ = disposable.DisposeAsync();
+            }
+        }
+
+        #endif
     }
 }
